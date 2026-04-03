@@ -1,0 +1,99 @@
+---
+title: "Navigation"
+description: "Move between notes quickly using the command palette, keyboard shortcuts, history, and sidebar."
+keywords: ["navigation", "command palette", "quick open", "history", "back", "forward", "keyboard shortcuts", "sidebar"]
+---
+
+Glyph is designed to keep your hands on the keyboard. The command palette, history navigation, and sidebar tree let you move between notes without reaching for the mouse.
+
+## Command palette
+
+Press `Cmd+P` (macOS) / `Ctrl+P` (Windows) to open the command palette. It is the fastest way to find a file, run a command, or open settings.
+
+The palette displays results grouped by section:
+
+| Section   | What it shows                                              |
+| --------- | ---------------------------------------------------------- |
+| Notes     | Markdown files in the workspace that match your query       |
+| Commands  | App-level actions such as **New Note** or **Open Folder**  |
+| Settings  | Shortcut to open the **Settings** panel                    |
+
+Type to filter results. Use the arrow keys to move through the list and `Enter` to select. Press `Escape` to close without selecting.
+
+<Tip>
+  Leave the query empty to browse all commands and recently accessed files.
+</Tip>
+
+## Quick open
+
+**Quick Open** is a dedicated file switcher focused on filename search.
+
+- Open it from the command palette, or use the search bar in the editor header
+- Type part of a filename to filter the list
+- Each result shows the filename and its relative path inside the workspace
+- Press `Enter` or click to open the file
+
+Quick Open only matches against filenames, not file content. For content search, use the [Search panel](/features/search).
+
+## Navigation history
+
+Glyph tracks the sequence of files you open and lets you move back and forward through that history — similar to browser navigation.
+
+| Action          | macOS       | Windows / Linux |
+| --------------- | ----------- | --------------- |
+| Navigate back   | `Cmd+[`     | `Ctrl+[`        |
+| Navigate forward | `Cmd+]`    | `Ctrl+]`        |
+
+The history holds up to **50 entries**. Back and forward buttons also appear in the editor toolbar; they are disabled when there is no history to navigate in that direction.
+
+## Markdown link navigation
+
+Glyph resolves links between markdown files in your workspace. When you `Cmd+Click` / `Ctrl+Click` a link in the editor:
+
+1. The main process resolves the link target relative to the current file's path.
+2. If no exact match is found, Glyph searches the workspace for a file whose name or relative path matches the link text.
+3. If the target is a markdown file, it opens in the editor and is added to your navigation history.
+4. If the target is an external URL, it opens in your default browser.
+
+Links to anchors (e.g. `#heading-name`) within the current file scroll to that heading without opening a new file.
+
+## Sidebar navigation
+
+The sidebar tree is the primary place to browse your workspace visually.
+
+<Steps>
+  <Step title="Open a file">
+    Click any filename in the sidebar. The file opens in the editor and the sidebar row becomes active (highlighted).
+  </Step>
+  <Step title="Expand or collapse a folder">
+    Click the folder name to toggle it open or closed. Expanded folders are remembered between sessions.
+  </Step>
+  <Step title="Drag to reorder">
+    Drag files and folders within the sidebar to reorder them.
+  </Step>
+</Steps>
+
+### Pinned files
+
+Files you pin appear at the top of the sidebar above the workspace tree. See [Workspace — Pinned files](/features/workspace#pinned-files) for details.
+
+## Global keyboard shortcuts
+
+All shortcuts can be customized in **Settings → Shortcuts**.
+
+| Action              | macOS         | Windows / Linux    |
+| ------------------- | ------------- | ------------------ |
+| Command palette     | `Cmd+P`       | `Ctrl+P`           |
+| New note            | `Cmd+N`       | `Ctrl+N`           |
+| Open file           | `Cmd+O`       | `Ctrl+O`           |
+| Open folder         | `Cmd+Shift+O` | `Ctrl+Shift+O`     |
+| Save                | `Cmd+S`       | `Ctrl+S`           |
+| Settings            | `Cmd+,`       | `Ctrl+,`           |
+| Toggle sidebar      | `Cmd+\`       | `Ctrl+\`           |
+| Navigate back       | `Cmd+[`       | `Ctrl+[`           |
+| Navigate forward    | `Cmd+]`       | `Ctrl+]`           |
+| Toggle focus mode   | `Cmd+Shift+F` | `Ctrl+Shift+F`     |
+
+<Note>
+  Shortcuts marked with `Cmd` use `Cmd` on macOS and `Ctrl` on Windows. Glyph registers them with the `CommandOrControl` alias so the same shortcut definition works on both platforms.
+</Note>

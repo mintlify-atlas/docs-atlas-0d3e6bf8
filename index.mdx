@@ -1,97 +1,70 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Welcome to Glyph"
+description: "A local-first markdown editor and reader for macOS and Windows. Your notes stay as plain files — beautiful to read, fast to edit."
 ---
 
-## Setting up
+Glyph is a focused desktop workspace for people who want plain markdown files, beautiful reading, and a lightweight writing flow — without turning their notes into a database. Open local folders, navigate between notes instantly, and write in a clean editor that stays out of your way.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Get started" icon="rocket" href="/introduction">
+    Learn what Glyph is and how it works
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Install Glyph" icon="download" href="/installation">
+    Download for macOS or Windows
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Quickstart" icon="bolt" href="/quickstart">
+    Open your first workspace in minutes
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Keyboard shortcuts" icon="keyboard" href="/reference/shortcuts-reference">
+    Navigate and edit at the speed of thought
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Core features
 
-Everything you need to create world-class documentation.
+<CardGroup cols={2}>
+  <Card title="Workspace" icon="folder-open" href="/features/workspace">
+    Open local folders and organize your markdown notes
+  </Card>
+  <Card title="Editor" icon="pen-to-square" href="/features/editor">
+    Rich markdown editing with TipTap, slash commands, and autosave
+  </Card>
+  <Card title="Navigation" icon="compass" href="/features/navigation">
+    Command palette, quick-open, and note history
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/features/search">
+    Full-text search across all notes in your workspace
+  </Card>
+</CardGroup>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Customize your experience
 
-## Need inspiration?
+<CardGroup cols={2}>
+  <Card title="Themes" icon="palette" href="/customization/themes">
+    Switch between light, dark, and system themes
+  </Card>
+  <Card title="Shortcuts" icon="command" href="/customization/shortcuts">
+    Remap every keyboard shortcut to fit your workflow
+  </Card>
+  <Card title="Settings" icon="gear" href="/customization/settings">
+    Configure workspace path, editor preferences, and more
+  </Card>
+  <Card title="Export" icon="file-export" href="/exporting/pdf-export">
+    Export notes as PDF or clean markdown files
+  </Card>
+</CardGroup>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Steps>
+  <Step title="Install Glyph">
+    Download the latest release for [macOS](/installation#macos) or [Windows](/installation#windows), or install via Homebrew with `brew install --cask FALAK097/glyph/glyph`.
+  </Step>
+  <Step title="Open a workspace">
+    Launch Glyph and it will open your `Documents/Glyph` folder automatically. Use **Cmd/Ctrl+Shift+O** to open any local folder.
+  </Step>
+  <Step title="Start writing">
+    Press **Cmd/Ctrl+N** to create a new note. Type `/` in the editor to insert tables, images, links, and more using slash commands.
+  </Step>
+  <Step title="Find anything fast">
+    Press **Cmd/Ctrl+P** to open the command palette — search notes, switch files, and run commands from one place.
+  </Step>
+</Steps>

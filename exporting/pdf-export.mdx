@@ -1,0 +1,55 @@
+---
+title: "PDF export"
+description: "Export your Glyph notes as PDF files to share with anyone."
+---
+
+Glyph can export any open note to a PDF file, saved directly to your Downloads folder.
+
+## How to export a note as PDF
+
+<Steps>
+  <Step title="Open the note you want to export">
+    Click the note in the sidebar to make it the active document.
+  </Step>
+  <Step title="Trigger the export">
+    Use either method:
+
+    - Open the **command palette** and search for **Export PDF**, then press Enter.
+    - Go to **File** → **Export PDF** in the menu bar.
+  </Step>
+  <Step title="Find the exported file">
+    Glyph saves the PDF to your OS Downloads folder. The filename matches the note name — for example, a note called `Meeting notes` is saved as `Meeting notes.pdf`.
+
+    If **Automatically open exported PDF** is enabled (the default), Glyph opens the file in your system's default PDF viewer immediately after export.
+  </Step>
+</Steps>
+
+## What gets included in the PDF
+
+Glyph converts your markdown to plain text before generating the PDF, using the following rules:
+
+| Markdown element | PDF output |
+|-----------------|------------|
+| Headings | Rendered as plain text lines |
+| Paragraphs | Rendered as body text |
+| Lists | Rendered with `•` bullet characters |
+| Code blocks | Rendered as plain text, separated by blank lines |
+| Blockquotes | Rendered with a `>` prefix |
+
+The note title (taken from the filename, without the `.pdf` extension) is rendered at **24pt Helvetica-Bold**. Body content is rendered at **11pt Helvetica**.
+
+<Note>
+  Images embedded in your markdown notes are not included in PDF exports. The export process converts markdown to plain text, so only text-based content is preserved.
+</Note>
+
+## Auto-open setting
+
+By default, Glyph opens the exported PDF in your system's default viewer as soon as the export completes. To change this behavior:
+
+1. Open **Settings** (**Cmd+,** / **Ctrl+,**).
+2. In the **General** tab, find the **PDF Export** section.
+3. Toggle **Automatically open exported PDF** on or off.
+
+<Tip>
+  Use PDF export to share notes with colleagues or collaborators who don't use Glyph — they only need a PDF viewer to read your content.
+</Tip>

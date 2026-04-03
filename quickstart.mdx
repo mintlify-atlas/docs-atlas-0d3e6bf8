@@ -1,80 +1,77 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Get from install to writing your first note in Glyph in a few minutes."
+keywords: ["quickstart", "getting started", "first note", "workspace", "editor"]
 ---
 
-## Get started in three steps
+This guide takes you from a fresh installation to writing your first note.
 
-Get your documentation site running locally and make your first customization.
+<Steps>
+  <Step title="Launch Glyph">
+    Open **Glyph** from Launchpad, Spotlight (macOS), or the Start menu (Windows).
 
-### Step 1: Set up your local environment
+    On first launch, Glyph automatically opens `Documents/Glyph` as your default workspace and creates the folder if it does not exist yet. The sidebar on the left shows your workspace tree.
+  </Step>
+  <Step title="Open a folder">
+    To use a different folder as your workspace, press `Cmd+Shift+O` on macOS or `Ctrl+Shift+O` on Windows — or go to **File > Open Folder** in the menu bar.
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    Select any local folder that contains markdown files. Glyph loads the entire folder tree into the sidebar, including nested subfolders.
+  </Step>
+  <Step title="Create a new note">
+    Press `Cmd+N` (macOS) or `Ctrl+N` (Windows) to create a new note.
 
-### Step 2: Deploy your changes
+    Glyph creates a new file at the workspace root and opens it in the editor immediately. Rename it from the sidebar once you know what to call it.
+  </Step>
+  <Step title="Write with slash commands">
+    Start typing in the editor. To insert rich content, type `/` at the **start of a line** to open the slash command menu.
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    From the slash menu you can insert:
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    - **Tables** — formatted markdown tables
+    - **Links** — inline links with URL and label
+    - **Images** — pick a local image from your machine
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+    Slash commands are the fastest way to add structure without leaving the keyboard.
+  </Step>
+  <Step title="Save your work">
+    Glyph autosaves as you type — you do not need to save manually. If you want to force a save immediately, press `Cmd+S` (macOS) or `Ctrl+S` (Windows).
 
-### Step 3: Go live
+    Files are saved as plain markdown on disk, so they are always accessible from any other editor or file manager.
+  </Step>
+  <Step title="Navigate with the command palette">
+    Press `Cmd+P` (macOS) or `Ctrl+P` (Windows) to open the command palette.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    From the command palette you can:
+
+    - **Quick-open** any file in the workspace by name
+    - **Search** your notes for a word or phrase
+    - **Run commands** like toggling the sidebar, opening settings, or switching themes
+
+    The command palette is the fastest way to move around without using the mouse.
+  </Step>
+</Steps>
+
+<Tip>
+  Press `Cmd+Shift+F` (macOS) or `Ctrl+Shift+F` (Windows) to toggle **focus mode**. Focus mode hides the sidebar and gives you a full-width editing canvas — useful when you want to write without distractions.
+</Tip>
+
+<Note>
+  Glyph supports markdown link navigation. If a note contains a link to another `.md` file in the same workspace (for example `[My other note](other-note.md)`), clicking the link opens that file directly in the editor. Use `Cmd+[` / `Ctrl+[` and `Cmd+]` / `Ctrl+]` to navigate back and forward through your file history.
+</Note>
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
-
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Editor" icon="pen-to-square" href="/features/editor">
+    Learn about TipTap editing, slash commands, task lists, and code blocks.
+  </Card>
+  <Card title="Navigation" icon="compass" href="/features/navigation">
+    Explore the command palette, quick-open, and note history.
+  </Card>
+  <Card title="Keyboard shortcuts" icon="keyboard" href="/reference/shortcuts-reference">
+    See every available shortcut and learn how to remap them.
+  </Card>
+  <Card title="Themes" icon="palette" href="/customization/themes">
+    Switch between light, dark, and system themes.
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

@@ -1,0 +1,71 @@
+---
+title: "Installation"
+description: "Install Glyph on macOS or Windows. Download a release directly or use Homebrew on macOS."
+keywords: ["install", "download", "macos", "windows", "homebrew", "dmg", "exe"]
+---
+
+Glyph runs on macOS and Windows. Choose the installation method that works best for you.
+
+## macOS
+
+### Homebrew
+
+The recommended way to install on macOS is with the Homebrew cask, which is kept in the Glyph repository and updated automatically with each release.
+
+<Steps>
+  <Step title="Install Homebrew">
+    If you do not have Homebrew installed, follow the instructions at [brew.sh](https://brew.sh). Skip this step if Homebrew is already set up.
+  </Step>
+  <Step title="Install Glyph">
+    Run the following command in your terminal:
+
+    ```bash
+    brew install --cask FALAK097/glyph/glyph
+    ```
+
+    Homebrew taps the `FALAK097/glyph` repository and installs the latest release DMG.
+  </Step>
+  <Step title="Launch Glyph">
+    Open **Glyph** from **Launchpad** or **Spotlight**. On first launch, macOS may ask you to confirm opening an app downloaded from the internet — click **Open**.
+  </Step>
+</Steps>
+
+### Direct download
+
+If you prefer not to use Homebrew, download the `.dmg` directly from [GitHub Releases](https://github.com/FALAK097/glyph/releases).
+
+1. Go to the [latest release](https://github.com/FALAK097/glyph/releases/latest) and download `Glyph-mac.dmg`.
+2. Open the `.dmg` file and drag **Glyph.app** to your **Applications** folder.
+3. Launch Glyph from **Launchpad** or **Applications**.
+
+## Windows
+
+Glyph for Windows ships as an NSIS installer (`.exe`).
+
+1. Go to the [latest release](https://github.com/FALAK097/glyph/releases/latest) and download `Glyph-windows.exe`.
+2. Run the installer. You can choose whether to install for the current user or for all users on the machine.
+3. Launch **Glyph** from the Start menu or desktop shortcut.
+
+## After installation
+
+### File associations
+
+After installing Glyph, the following file types will open in Glyph automatically when you double-click them:
+
+| Extension | Type |
+| --------- | ---- |
+| `.md` | Markdown document |
+| `.mdx` | MDX document |
+| `.markdown` | Markdown file |
+
+### Default workspace
+
+On first launch, Glyph creates and opens `Documents/Glyph` as your default workspace. This folder is created automatically if it does not already exist. You can change your default workspace path in **Settings**.
+
+### Auto-updates
+
+Glyph checks for updates automatically every 6 hours in the background. When a new version is available, you will see an update notification in the app. Updates are downloaded only when you approve them and installed when you restart.
+
+<Note>
+  Auto-updates require a packaged installation (Homebrew or direct download). Updates are not checked in development builds.
+</Note>

@@ -1,0 +1,66 @@
+---
+title: "Introduction"
+description: "Glyph is a local-first markdown editor and reader for macOS and Windows. Your notes stay as plain files on disk — no database, no sync lock-in."
+keywords: ["glyph", "markdown editor", "local-first", "macos", "windows", "electron"]
+---
+
+Glyph is a focused desktop workspace for people who want plain markdown files, beautiful reading, and a lightweight writing flow. You open local folders, move quickly between notes, and edit in a clean environment that stays out of your way.
+
+**Current version: 0.3.0**
+
+## Design philosophy
+
+Glyph sits in the middle ground between plain-text tools and heavyweight note systems:
+
+- **Plain files on disk.** Every note is a `.md`, `.mdx`, or `.markdown` file you own. There is no proprietary database or format to export from.
+- **Beautiful reading.** The rendered view is typography-first — comfortable to read, not just functional.
+- **Fast navigation.** The command palette, quick-open, and keyboard shortcuts let you reach any note without lifting your hands from the keyboard.
+- **No lock-in.** Because your notes are plain files, you can open them in any editor, back them up with any tool, and move them anywhere at any time.
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="Workspace" icon="folder-open" href="/features/workspace">
+    Open any local folder as a workspace. Glyph creates `Documents/Glyph` for you automatically on first launch.
+  </Card>
+  <Card title="Editor" icon="pen-to-square" href="/features/editor">
+    TipTap-powered editor with slash commands, autosave, syntax highlighting, tables, task lists, and image insertion.
+  </Card>
+  <Card title="Navigation" icon="compass" href="/features/navigation">
+    Command palette (`Cmd/Ctrl+P`), quick-open, back/forward history, and markdown link navigation between notes.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/features/search">
+    Full-text search across every note in your workspace, with line-level results and live previews.
+  </Card>
+  <Card title="Themes" icon="palette" href="/customization/themes">
+    Light, dark, and system-synced themes with multiple built-in color schemes.
+  </Card>
+  <Card title="Shortcuts" icon="command" href="/customization/shortcuts">
+    Every action has a keyboard shortcut, and every shortcut is remappable from **Settings**.
+  </Card>
+  <Card title="Export" icon="file-export" href="/exporting/pdf-export">
+    Export any note as a PDF or clean markdown file directly from the editor.
+  </Card>
+  <Card title="Focus mode" icon="expand" href="/features/editor">
+    Press `Cmd/Ctrl+Shift+F` to hide the sidebar and enter a distraction-free writing environment.
+  </Card>
+</CardGroup>
+
+## Built with
+
+Glyph is an [Electron](https://www.electronjs.org/) app with a React frontend. The key libraries powering the experience are:
+
+- **[TipTap](https://tiptap.dev/)** — rich-text editor with full markdown support
+- **[Zustand](https://zustand-demo.pmnd.rs/)** — lightweight state management
+- **[Tailwind CSS v4](https://tailwindcss.com/)** — utility-first styling with OKLCH design tokens
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Install Glyph" icon="download" href="/installation">
+    Download for macOS or Windows, or install via Homebrew.
+  </Card>
+  <Card title="Quickstart" icon="bolt" href="/quickstart">
+    Open your first workspace and write your first note.
+  </Card>
+</CardGroup>

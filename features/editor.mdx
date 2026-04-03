@@ -1,0 +1,146 @@
+---
+title: "Editor"
+description: "Writing experience in Glyph — formatting, slash commands, images, tables, and more."
+keywords: ["editor", "tiptap", "markdown", "slash commands", "focus mode", "table", "task list", "code block", "outline", "autosave"]
+---
+
+Glyph uses [TipTap](https://tiptap.dev) as its editing engine. TipTap renders your markdown as a rich document while keeping the underlying format as plain markdown — every file on disk is standard, portable markdown.
+
+## Markdown shortcuts
+
+You do not need the slash command menu to apply formatting. Common markdown syntax works inline as you type:
+
+| Type this…        | Result                  |
+| ----------------- | ----------------------- |
+| `# ` at line start    | Heading 1               |
+| `## ` at line start   | Heading 2               |
+| `### ` at line start  | Heading 3               |
+| `#### ` at line start | Heading 4               |
+| `**text**`        | **Bold**                |
+| `*text*` or `_text_` | *Italic*             |
+| `~~text~~`        | ~~Strikethrough~~       |
+| `` `text` ``      | Inline code             |
+| `- ` or `* `      | Bullet list             |
+| `1. `             | Numbered list           |
+| `- [ ] `          | Task list item          |
+| `> `              | Blockquote              |
+| ` ``` `           | Code block              |
+| `---`             | Horizontal rule         |
+
+You can also use the keyboard shortcuts shown in the slash command menu, such as `Cmd+B` / `Ctrl+B` for bold and `Cmd+I` / `Ctrl+I` for italic.
+
+## Slash commands
+
+Type `/` at the start of a line to open the slash command menu. Start typing to filter the list. Press `Enter` or click an item to insert it.
+
+<Tabs>
+  <Tab title="Headings">
+    | Command    | Shortcut      |
+    | ---------- | ------------- |
+    | Heading 1  | `Cmd+Alt+1`   |
+    | Heading 2  | `Cmd+Alt+2`   |
+    | Heading 3  | `Cmd+Alt+3`   |
+  </Tab>
+  <Tab title="Lists">
+    | Command       | Notes                          |
+    | ------------- | ------------------------------ |
+    | Bullet list   | Unordered list                 |
+    | Numbered list | Ordered list                   |
+    | Task list     | Checkbox items, supports nesting |
+  </Tab>
+  <Tab title="Blocks">
+    | Command         | Notes                               |
+    | --------------- | ----------------------------------- |
+    | Quote           | Blockquote (`Cmd+Shift+B`)          |
+    | Table           | Opens a dialog to set rows and cols |
+    | Code block      | Syntax-highlighted fenced block     |
+    | Horizontal rule | Thematic break                      |
+  </Tab>
+  <Tab title="Inline">
+    | Command       | Shortcut   |
+    | ------------- | ---------- |
+    | Bold          | `Cmd+B`    |
+    | Italic        | `Cmd+I`    |
+    | Strikethrough | `Cmd+Shift+S` |
+    | Inline code   | `Cmd+E`    |
+    | Link          | `Cmd+K`    |
+    | Image         | —          |
+  </Tab>
+</Tabs>
+
+Press `Escape` to close the slash command menu without inserting anything.
+
+## Tables
+
+Insert a table with `/table` and configure the number of rows and columns in the dialog. After insertion, a **Table** toolbar appears at the top of the editor whenever your cursor is inside the table. Use it to:
+
+- Add or remove rows and columns
+- Toggle the header row
+- Delete the entire table
+
+Tables support resizable columns — drag the column borders to adjust widths.
+
+## Task lists
+
+Type `- [ ] ` to start a task list, or use `/task` from the slash command menu. Click the checkbox to toggle an item complete. Task items can be nested inside each other.
+
+## Code blocks with syntax highlighting
+
+Code blocks use [lowlight](https://github.com/wooorm/lowlight) (powered by highlight.js) to highlight over 180 languages. Specify the language after the opening fence:
+
+````markdown
+```typescript
+const greeting: string = "Hello, Glyph";
+```
+````
+
+The language label appears at the top of the rendered block.
+
+## Images
+
+<Steps>
+  <Step title="Use the slash command">
+    Type `/image` to open the Insert Image dialog.
+  </Step>
+  <Step title="Add an image source">
+    Either paste a remote image URL into the **Image source** field, or click **Choose Local Image** to open a native file picker and select a local file (PNG, JPG, GIF, WebP, SVG, AVIF supported).
+  </Step>
+  <Step title="Set alt text and insert">
+    Enter alt text in the **Alt text** field and click **Insert Image**. The image renders inline in the editor with a live preview before you confirm.
+  </Step>
+</Steps>
+
+Local images are served through a secure local asset protocol — they display correctly in Glyph without being copied into your workspace folder.
+
+To delete an image, click it to select it and then click the **trash** button that appears in the top-right corner of the image.
+
+## Links
+
+Insert a link with `Cmd+K` / `Ctrl+K`, or type `/link`. In the **Insert Link** dialog, enter the **Label** (link text) and the **URL**. Glyph normalizes bare domains like `example.com` to `https://` automatically. You can also paste a markdown link directly — `[text](url)` — and Glyph converts it to a live link.
+
+To follow a link in the editor, hold `Cmd` (macOS) or `Ctrl` (Windows) and click the link. Links to markdown files within the same workspace open that file in the editor. External URLs open in your default browser.
+
+## Table of contents outline
+
+An outline panel appears on the right side of the editor at large viewport widths. It lists every heading in the current file (levels 1–4) and highlights the section currently in view as you scroll. Click any heading to jump to it.
+
+The outline is controlled by the `showOutline` editor preference. Toggle it using the outline icon in the editor toolbar — the setting persists automatically.
+
+## Focus mode
+
+Focus mode hides the sidebar and reduces interface chrome to keep you focused on writing.
+
+- Toggle with `Cmd+Shift+F` (macOS) / `Ctrl+Shift+F` (Windows)
+- Or click the **Focus** icon in the editor toolbar
+
+The outline panel is also hidden in focus mode. Press the shortcut again, or click the focus icon, to return to the normal layout.
+
+## Autosave and draft state
+
+Glyph saves the file automatically whenever you make a change. The status bar at the bottom of the editor shows whether the file is **Saved** or has unsaved changes.
+
+If another application edits the file while Glyph is open, the file watcher detects the change and refreshes the editor content safely without losing your cursor position when possible.
+
+<Note>
+  Glyph saves automatically as you type. If Glyph closes unexpectedly, your most recent save is preserved on disk — the autosave interval is very short so data loss is minimal.
+</Note>

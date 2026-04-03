@@ -1,0 +1,139 @@
+---
+title: "Troubleshooting"
+description: "Solutions to common problems in Glyph, plus steps for resetting the app to its default state."
+---
+
+<AccordionGroup>
+
+  <Accordion title="Glyph won't open or crashes on launch">
+    A corrupted or invalid `settings.json` is the most common cause of launch failures.
+
+    <Steps>
+      <Step title="Locate the settings file">
+        Find `settings.json` in the Glyph userData directory:
+
+        - **macOS:** `~/Library/Application Support/Glyph/settings.json`
+        - **Windows:** `%APPDATA%\Roaming\Glyph\settings.json`
+      </Step>
+      <Step title="Delete the settings file">
+        Delete `settings.json`. Glyph will recreate it with defaults on the next launch.
+      </Step>
+      <Step title="Relaunch Glyph">
+        Open Glyph again. If it starts successfully, reconfigure your preferences in **Settings**.
+      </Step>
+    </Steps>
+
+    <Note>
+      Deleting `settings.json` resets all preferences — theme, shortcuts, pinned files, and default workspace path — to their defaults. Your markdown files are not affected.
+    </Note>
+
+    If Glyph still fails to open after deleting `settings.json`, try reinstalling the app from [GitHub Releases](https://github.com/FALAK097/glyph/releases).
+  </Accordion>
+
+  <Accordion title="My files don't appear in the sidebar">
+    Glyph only shows files with `.md`, `.mdx`, or `.markdown` extensions in the sidebar and search index. Files with any other extension (including `.txt`) are not displayed.
+
+    Check the following:
+
+    - Confirm that your files have a supported extension.
+    - Confirm that the files are inside the folder you opened as your workspace. Files outside the workspace root are not shown.
+    - If you recently added files to the workspace folder from outside Glyph, try using **File > Open Folder** to re-open the workspace and refresh the tree.
+
+    <Tip>
+      You can re-open the current workspace folder by going to **File > Open Folder** and selecting the same directory. This triggers a full re-scan.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Changes I made outside Glyph aren't appearing">
+    Glyph watches your workspace folder for external changes using chokidar. Changes are picked up automatically with a 150 ms stabilization delay to avoid partial reads.
+
+    If a change you made in another editor or tool is not reflected in Glyph:
+
+    - Wait a moment — large file writes may take slightly longer to stabilize.
+    - Close and reopen the file in Glyph by clicking it in the sidebar.
+    - If the issue persists, close the workspace and reopen the folder via **File > Open Folder**.
+    - As a last resort, restart Glyph.
+
+    <Note>
+      File watching only covers changes to `.md`, `.mdx`, and `.markdown` files. Changes to other file types are silently ignored.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Keyboard shortcuts aren't working">
+    If a keyboard shortcut doesn't trigger its action:
+
+    - Open **Settings → Keyboard Shortcuts** and check whether the shortcut is set to the key combination you expect.
+    - Look for conflicts: two actions assigned the same key combination will both fail. Glyph rejects duplicate shortcuts when you save settings.
+    - On **Windows**, use **Ctrl** in place of **Cmd** for all shortcuts. For example, save is `Ctrl+S`, not `Cmd+S`.
+    - Some shortcuts may conflict with OS-level shortcuts or other applications running in the background. Try closing other apps to rule this out.
+
+    You can reset all shortcuts to their defaults by deleting the `shortcuts` key from `settings.json` (while Glyph is closed) or by clicking **Reset to defaults** in **Settings → Shortcuts**.
+  </Accordion>
+
+  <Accordion title="Auto-updates aren't working">
+    Auto-updates only work in packaged production builds downloaded from GitHub Releases. They are disabled in development mode.
+
+    If you see "Updates not available" or no update prompt despite a new release being available:
+
+    - Confirm you are running a packaged build, not a development build. You can check **Glyph > About Glyph** (macOS) or the title bar for the version number.
+    - Check your internet connection.
+    - Wait a few minutes and try again — Glyph checks for updates automatically every 6 hours in the background.
+
+    If automatic updates continue to fail, download the latest release manually:
+
+    [https://github.com/FALAK097/glyph/releases](https://github.com/FALAK097/glyph/releases)
+  </Accordion>
+
+  <Accordion title="PDF export is blank or missing content">
+    Glyph's PDF export converts markdown to plain text using PDFKit. This has some known limitations:
+
+    - **Images are not included.** Local images and remote images are both omitted from the exported PDF.
+    - **Inline HTML is not rendered.** Any raw HTML in your markdown (e.g., `<details>`, `<table>`) will be stripped or may not appear correctly.
+    - **Tables are not formatted.** Table syntax is parsed as plain text.
+
+    If the exported PDF is completely blank, check that the document contains text content that is not exclusively raw HTML or images.
+
+    <Tip>
+      For rich output including images and tables, consider copying your content into a tool that supports full HTML-to-PDF rendering.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Glyph is slow with a large folder">
+    Glyph indexes all markdown files in your workspace when you open a folder. For very large workspaces (hundreds or thousands of files), the initial scan and search index build may take a noticeable moment.
+
+    To improve performance:
+
+    - Use subfolders to organize your notes and open a specific subfolder as your workspace instead of a large root directory.
+    - Archive older notes in a separate folder outside your active workspace.
+    - Avoid workspaces that contain many large markdown files — search results are capped at 50, but reading files to build the index takes time proportional to total file count.
+
+    After the initial load, normal editing and navigation should remain responsive.
+  </Accordion>
+
+</AccordionGroup>
+
+## Resetting Glyph
+
+To return Glyph to its default state, delete the settings file while the app is closed:
+
+- **macOS:** `~/Library/Application Support/Glyph/settings.json`
+- **Windows:** `%APPDATA%\Roaming\Glyph\settings.json`
+
+Glyph recreates `settings.json` with default values on the next launch. This resets:
+
+- Default workspace path
+- Theme and color mode
+- Keyboard shortcuts
+- Pinned files
+- Sidebar state
+- Editor preferences
+
+Your markdown files are stored separately and are not affected.
+
+## Still stuck?
+
+If your issue is not listed here, open a bug report on GitHub:
+
+[https://github.com/FALAK097/glyph/issues](https://github.com/FALAK097/glyph/issues)
+
+Include your Glyph version (visible in **Glyph > About Glyph** on macOS or the title bar on Windows), your operating system, and steps to reproduce the problem.

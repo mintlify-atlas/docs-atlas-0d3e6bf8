@@ -1,0 +1,714 @@
+---
+title: "Preload API reference"
+description: "Complete reference for the window.glyph API exposed to the renderer via Electron's contextBridge."
+---
+
+Glyph uses Electron's contextBridge to expose a safe, sandboxed API to the renderer process. Context isolation and sandbox mode are both enabled — the renderer has no direct access to Node.js or Electron APIs. All file system operations, OS dialogs, and system interactions go through `window.glyph`.
+
+<Note>
+  This reference is intended for contributors and anyone building on top of Glyph's renderer. End users interact with these APIs indirectly through the UI.
+</Note>
+
+## TypeScript types
+
+The types below are defined in `apps/desktop/src/shared/workspace.ts` and shared between the main process and renderer.
+
+### `FileDocument`
+
+Represents an open markdown file.
+
+<ResponseField name="path" type="string" required>
+  Absolute path to the file on disk.
+</ResponseField>
+<ResponseField name="name" type="string" required>
+  Filename including extension (e.g., `notes.md`).
+</ResponseField>
+<ResponseField name="content" type="string" required>
+  Full UTF-8 text content of the file. Line endings are normalized to LF.
+</ResponseField>
+
+---
+
+### `DirectoryNode`
+
+A union type representing a node in the workspace file tree.
+
+```typescript
+type FileNode = {
+  type: "file";
+  name: string;
+  path: string;
+};
+
+type DirectoryBranch = {
+  type: "directory";
+  name: string;
+  path: string;
+  children: DirectoryNode[];
+};
+
+type DirectoryNode = FileNode | DirectoryBranch;
+```
+
+---
+
+### `WorkspaceSnapshot`
+
+Returned when a workspace folder is opened.
+
+<ResponseField name="rootPath" type="string" required>
+  Absolute path to the workspace root directory.
+</ResponseField>
+<ResponseField name="tree" type="DirectoryNode[]" required>
+  Recursive file tree of all markdown files and subdirectories under `rootPath`.
+</ResponseField>
+<ResponseField name="activeFile" type="FileDocument | null" required>
+  The first markdown file opened automatically, or `null` if the workspace is empty.
+</ResponseField>
+
+---
+
+### `AppSettings`
+
+All persisted user preferences. Stored in `settings.json` in the OS userData directory.
+
+<ResponseField name="defaultWorkspacePath" type="string" required>
+  Path to the folder opened when Glyph launches. Defaults to `~/Documents/Glyph`.
+</ResponseField>
+<ResponseField name="themeId" type="string" required>
+  Identifier of the active color theme (e.g., `"aura"`).
+</ResponseField>
+<ResponseField name="themeMode" type='"light" | "dark" | "system"' required>
+  Color scheme preference.
+</ResponseField>
+<ResponseField name="pinnedFiles" type="string[]" required>
+  Absolute paths of files pinned in the sidebar.
+</ResponseField>
+<ResponseField name="shortcuts" type="ShortcutSetting[]" required>
+  Custom keyboard shortcut bindings. Each entry has `id: string` and `keys: string`.
+</ResponseField>
+<ResponseField name="sidebar" type="SidebarState" required>
+  Sidebar item list and expanded folder paths.
+  <Expandable title="SidebarState properties">
+    <ResponseField name="items" type="SidebarItemSetting[]">
+      Pinned sidebar entries. Each has `kind: "file" | "directory"` and `path: string`.
+    </ResponseField>
+    <ResponseField name="expandedFolders" type="string[]">
+      Absolute paths of directories currently expanded in the sidebar.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+<ResponseField name="editorPreferences" type="EditorPreferences" required>
+  Editor-level display options.
+  <Expandable title="EditorPreferences properties">
+    <ResponseField name="focusMode" type="boolean">
+      Whether focus mode (distraction-free view) is enabled.
+    </ResponseField>
+    <ResponseField name="showOutline" type="boolean">
+      Whether the document outline panel is visible.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+<ResponseField name="autoOpenPDF" type="boolean" required>
+  When `true`, exported PDF files open automatically after export.
+</ResponseField>
+
+---
+
+### `SearchResult`
+
+One matching line returned by `searchWorkspace`.
+
+<ResponseField name="path" type="string" required>
+  Absolute path to the file containing the match.
+</ResponseField>
+<ResponseField name="name" type="string" required>
+  Filename of the matched file.
+</ResponseField>
+<ResponseField name="line" type="number" required>
+  1-based line number of the match within the file.
+</ResponseField>
+<ResponseField name="snippet" type="string" required>
+  Trimmed line content, truncated to 180 characters.
+</ResponseField>
+
+---
+
+### `UpdateState`
+
+Current state of the auto-updater.
+
+<ResponseField name="status" type="UpdateStatus" required>
+  One of: `"idle"`, `"checking"`, `"available"`, `"downloading"`, `"downloaded"`, `"not-available"`, `"error"`.
+</ResponseField>
+<ResponseField name="currentVersion" type="string" required>
+  Currently installed app version.
+</ResponseField>
+<ResponseField name="availableVersion" type="string | null" required>
+  Version string of an available update, or `null` if none is known.
+</ResponseField>
+<ResponseField name="downloadedVersion" type="string | null" required>
+  Version string of the update staged on disk, or `null`.
+</ResponseField>
+<ResponseField name="releaseName" type="string | null" required>
+  Release title from GitHub, or `null`.
+</ResponseField>
+<ResponseField name="releaseNotes" type="string | null" required>
+  Markdown release notes, or `null`.
+</ResponseField>
+<ResponseField name="progressPercent" type="number | null" required>
+  Download progress from 0–100, or `null` when not downloading.
+</ResponseField>
+<ResponseField name="checkedAt" type="string | null" required>
+  ISO 8601 timestamp of the last update check, or `null`.
+</ResponseField>
+<ResponseField name="errorMessage" type="string | null" required>
+  Human-readable error string, or `null`.
+</ResponseField>
+
+---
+
+### `DialogKind`
+
+```typescript
+type DialogKind = "file" | "directory" | "image" | "any-file";
+```
+
+Controls which file types are selectable in native OS dialogs. `"file"` restricts to markdown files; `"image"` restricts to image formats; `"any-file"` places no filter.
+
+---
+
+### `AppCommand`
+
+Commands dispatched from the application menu to the renderer.
+
+```typescript
+type AppCommand =
+  | "open-file"
+  | "open-folder"
+  | "save"
+  | "new-file"
+  | "new-folder"
+  | "search"
+  | "quick-open"
+  | "toggle-sidebar"
+  | "focus-mode";
+```
+
+---
+
+## Methods
+
+All methods are available on `window.glyph` in the renderer.
+
+### Dialogs and asset picking
+
+#### `openDialog`
+
+Opens a native OS file or folder picker dialog.
+
+```typescript
+openDialog(kind: DialogKind): Promise<FileOpenResult | null>
+```
+
+<ParamField path="kind" type="DialogKind" required>
+  Type of dialog to open. `"file"` shows a markdown file picker; `"directory"` shows a folder picker; `"image"` shows an image file picker; `"any-file"` shows an unrestricted file picker.
+</ParamField>
+
+Returns `null` if the user cancels. Otherwise returns:
+
+<ResponseField name="kind" type='"file" | "directory"' required>
+  Whether the user selected a file or a directory.
+</ResponseField>
+<ResponseField name="path" type="string" required>
+  Absolute path to the selected item.
+</ResponseField>
+
+---
+
+#### `pickAsset`
+
+Opens a native file picker and returns the selected asset with a URL suitable for embedding.
+
+```typescript
+pickAsset(kind: "image" | "any-file"): Promise<AssetSelection | null>
+```
+
+<ParamField path="kind" type='"image" | "any-file"' required>
+  `"image"` filters to image formats and returns a `glyph-local://` URL. `"any-file"` accepts any file and returns a `file://` URL.
+</ParamField>
+
+Returns `null` if the user cancels. Otherwise returns:
+
+<ResponseField name="path" type="string" required>
+  Absolute path to the selected file.
+</ResponseField>
+<ResponseField name="name" type="string" required>
+  Filename of the selected file.
+</ResponseField>
+<ResponseField name="url" type="string" required>
+  URL to reference the asset from the renderer. Images use the `glyph-local://` protocol; other files use `file://`.
+</ResponseField>
+
+---
+
+#### `resolveLinkTarget`
+
+Resolves a markdown link `href` to an absolute path or external URL, taking the current file's location and the active workspace into account.
+
+```typescript
+resolveLinkTarget(
+  currentFilePath: string | null,
+  href: string
+): Promise<ResolvedLinkTarget | null>
+```
+
+<ParamField path="currentFilePath" type="string | null" required>
+  Absolute path of the file that contains the link, used to resolve relative paths. Pass `null` if there is no current file context.
+</ParamField>
+<ParamField path="href" type="string" required>
+  The raw `href` value from the markdown link (e.g., `"./notes.md"`, `"https://example.com"`, or `"filename"`).
+</ParamField>
+
+Returns `null` if the target cannot be resolved (e.g., the link is empty, an anchor-only fragment, or the file does not exist). Otherwise returns:
+
+<ResponseField name="kind" type='"markdown-file" | "file" | "external"' required>
+  `"markdown-file"` if the resolved target is a markdown file; `"file"` for other local files; `"external"` for `https://` URLs and domain-like strings.
+</ResponseField>
+<ResponseField name="target" type="string" required>
+  Normalized absolute path (for local files) or full URL (for external links).
+</ResponseField>
+
+---
+
+### Workspace
+
+#### `openFolder`
+
+Opens a workspace folder. If `dirPath` is omitted, shows a native folder picker.
+
+```typescript
+openFolder(dirPath?: string): Promise<WorkspaceSnapshot | null>
+```
+
+<ParamField path="dirPath" type="string">
+  Absolute path to open directly. If not provided, the user is prompted to choose a folder.
+</ParamField>
+
+Returns a `WorkspaceSnapshot` on success, or `null` if the user cancels the picker.
+
+---
+
+#### `openDefaultWorkspace`
+
+Opens the folder set as `defaultWorkspacePath` in settings. Creates the folder if it does not exist.
+
+```typescript
+openDefaultWorkspace(): Promise<WorkspaceSnapshot | null>
+```
+
+Returns a `WorkspaceSnapshot`.
+
+---
+
+#### `openDocument`
+
+Shows a native markdown file picker and reads the selected file.
+
+```typescript
+openDocument(): Promise<FileDocument | null>
+```
+
+Returns a `FileDocument`, or `null` if the user cancels.
+
+---
+
+### File operations
+
+#### `readFile`
+
+Reads a markdown file from disk. Line endings are normalized to LF.
+
+```typescript
+readFile(filePath: string): Promise<FileDocument>
+```
+
+<ParamField path="filePath" type="string" required>
+  Absolute path to the markdown file to read.
+</ParamField>
+
+Throws if the file does not exist or cannot be read.
+
+---
+
+#### `saveFile`
+
+Writes content to an existing file. CRLF line endings are preserved if the original file used them.
+
+```typescript
+saveFile(filePath: string, content: string): Promise<FileDocument>
+```
+
+<ParamField path="filePath" type="string" required>
+  Absolute path of the file to write.
+</ParamField>
+<ParamField path="content" type="string" required>
+  Full updated text content to write.
+</ParamField>
+
+Returns the updated `FileDocument` after the write completes.
+
+---
+
+#### `createFile`
+
+Creates a new markdown file inside the active workspace. Appends `.md` if no markdown extension is provided.
+
+```typescript
+createFile(parentDir: string, fileName: string): Promise<FileDocument>
+```
+
+<ParamField path="parentDir" type="string" required>
+  Absolute path to the directory in which to create the file. Must be within the active workspace.
+</ParamField>
+<ParamField path="fileName" type="string" required>
+  Filename for the new file. Must not contain path separators. A `.md` extension is added automatically if the name has no recognized markdown extension.
+</ParamField>
+
+Throws if a file with the same name already exists or if `parentDir` is outside the workspace.
+
+---
+
+#### `renameFile`
+
+Renames a markdown file within the active workspace.
+
+```typescript
+renameFile(oldPath: string, newName: string): Promise<FileDocument>
+```
+
+<ParamField path="oldPath" type="string" required>
+  Absolute path of the file to rename. Must be within the active workspace.
+</ParamField>
+<ParamField path="newName" type="string" required>
+  New filename. Must not contain path separators. The original extension is preserved if `newName` has no recognized markdown extension.
+</ParamField>
+
+Returns the `FileDocument` at the new path.
+
+---
+
+#### `deleteFile`
+
+Permanently deletes a file from the active workspace.
+
+```typescript
+deleteFile(targetPath: string): Promise<string>
+```
+
+<ParamField path="targetPath" type="string" required>
+  Absolute path of the file to delete. Must be within the active workspace.
+</ParamField>
+
+Returns the deleted file path on success.
+
+<Warning>
+  Deletion is permanent. Glyph does not move files to the system Trash.
+</Warning>
+
+---
+
+#### `createFolder`
+
+Creates a new subdirectory inside the active workspace and returns the updated workspace tree.
+
+```typescript
+createFolder(parentDir: string, folderName: string): Promise<DirectoryNode[]>
+```
+
+<ParamField path="parentDir" type="string" required>
+  Absolute path of the parent directory. Must be within the active workspace.
+</ParamField>
+<ParamField path="folderName" type="string" required>
+  Name of the new folder. Must not contain path separators.
+</ParamField>
+
+Returns the full `DirectoryNode[]` tree rooted at the workspace root after the folder is created.
+
+---
+
+### Search
+
+#### `searchWorkspace`
+
+Performs a case-insensitive full-text search across all indexed markdown files in the active workspace. Returns up to 50 results.
+
+```typescript
+searchWorkspace(query: string): Promise<SearchResult[]>
+```
+
+<ParamField path="query" type="string" required>
+  Search query string. Returns an empty array if the query is blank or no workspace is open.
+</ParamField>
+
+---
+
+### Sidebar
+
+#### `getSidebarNode`
+
+Returns a single `DirectoryNode` for a given path, or `null` if the path does not exist or does not match the expected kind.
+
+```typescript
+getSidebarNode(
+  kind: "file" | "directory",
+  targetPath: string
+): Promise<DirectoryNode | null>
+```
+
+<ParamField path="kind" type='"file" | "directory"' required>
+  Whether to look up a file or a directory node.
+</ParamField>
+<ParamField path="targetPath" type="string" required>
+  Absolute path of the node to retrieve.
+</ParamField>
+
+For `"file"`, only markdown files are returned. For `"directory"`, the returned node includes the full recursive `children` tree.
+
+---
+
+### Settings
+
+#### `getSettings`
+
+Reads and returns the current application settings from disk.
+
+```typescript
+getSettings(): Promise<AppSettings>
+```
+
+---
+
+#### `updateSettings`
+
+Applies a partial settings update and persists the result to disk. Also refreshes the application menu if shortcuts are changed.
+
+```typescript
+updateSettings(patch: Partial<AppSettings>): Promise<AppSettings>
+```
+
+<ParamField path="patch" type="Partial<AppSettings>" required>
+  Object containing only the settings keys to update. Unknown keys are rejected. Invalid values throw an error.
+</ParamField>
+
+Returns the full merged `AppSettings` after the write completes.
+
+---
+
+### App info
+
+#### `getAppInfo`
+
+Returns metadata about the running application.
+
+```typescript
+getAppInfo(): Promise<AppInfo>
+```
+
+<ResponseField name="name" type="string" required>
+  Application name (`"Glyph"`).
+</ResponseField>
+<ResponseField name="version" type="string" required>
+  Current version string (e.g., `"1.2.0"`).
+</ResponseField>
+<ResponseField name="isPackaged" type="boolean" required>
+  `true` when running as a packaged production build.
+</ResponseField>
+<ResponseField name="platform" type="string" required>
+  Node.js platform string: `"darwin"` (macOS) or `"win32"` (Windows).
+</ResponseField>
+<ResponseField name="updatesEnabled" type="boolean" required>
+  `true` when auto-updates are active (packaged builds only).
+</ResponseField>
+
+---
+
+### Updates
+
+#### `checkForUpdates`
+
+Triggers an update check against the GitHub releases feed.
+
+```typescript
+checkForUpdates(): Promise<UpdateState>
+```
+
+Returns the current `UpdateState`. In development builds, returns `"idle"` immediately without contacting the server.
+
+---
+
+#### `downloadUpdate`
+
+Begins downloading the available update. Has no effect if a download is already in progress or the update is already downloaded.
+
+```typescript
+downloadUpdate(): Promise<UpdateState>
+```
+
+Returns the current `UpdateState`. Progress is also broadcast via `onUpdateStateChange`.
+
+---
+
+#### `installUpdate`
+
+Quits Glyph and installs the downloaded update. Has no effect unless `status` is `"downloaded"` and the build is packaged.
+
+```typescript
+installUpdate(): Promise<void>
+```
+
+---
+
+### Event listeners
+
+All listener methods return a cleanup function. Call the returned function to unsubscribe when the component unmounts.
+
+```typescript
+const unsubscribe = window.glyph.onCommand((command) => { ... });
+// later:
+unsubscribe();
+```
+
+---
+
+#### `onWorkspaceChanged`
+
+Subscribes to file system changes inside the active workspace. Glyph uses chokidar with a 150 ms debounce.
+
+```typescript
+onWorkspaceChanged(
+  listener: (event: WorkspaceChangeEvent) => void
+): () => void
+```
+
+<ParamField path="listener" type="(event: WorkspaceChangeEvent) => void" required>
+  Callback invoked whenever a markdown file is added, changed, or removed. The event contains `rootPath: string`, `tree: DirectoryNode[]`, and `changedPath: string`.
+</ParamField>
+
+---
+
+#### `onCommand`
+
+Subscribes to commands dispatched from the application menu (e.g., **File > New Note**).
+
+```typescript
+onCommand(listener: (command: AppCommand) => void): () => void
+```
+
+<ParamField path="listener" type="(command: AppCommand) => void" required>
+  Callback invoked with the `AppCommand` string each time a menu action is triggered.
+</ParamField>
+
+---
+
+#### `onExternalFile`
+
+Subscribes to files or folders opened in Glyph from the OS (e.g., double-clicking a `.md` file in Finder or Explorer).
+
+```typescript
+onExternalFile(
+  listener: (target: ExternalFileTarget) => void
+): () => void
+```
+
+<ParamField path="listener" type="(target: ExternalFileTarget) => void" required>
+  Callback invoked with `{ path: string, isDirectory: boolean }`.
+</ParamField>
+
+---
+
+#### `onUpdateStateChange`
+
+Subscribes to auto-updater state changes.
+
+```typescript
+onUpdateStateChange(
+  listener: (state: UpdateState) => void
+): () => void
+```
+
+<ParamField path="listener" type="(state: UpdateState) => void" required>
+  Callback invoked whenever the `UpdateState` changes (e.g., when a download starts or completes).
+</ParamField>
+
+---
+
+### OS integration
+
+#### `revealInFinder`
+
+Reveals a file or folder in Finder (macOS) or Explorer (Windows).
+
+```typescript
+revealInFinder(targetPath: string): Promise<boolean>
+```
+
+<ParamField path="targetPath" type="string" required>
+  Absolute path of the file or folder to reveal.
+</ParamField>
+
+Returns `true` on success, `false` if the shell call fails.
+
+---
+
+#### `openExternal`
+
+Opens a URL in the default browser, or a file in its default OS application.
+
+```typescript
+openExternal(path: string): Promise<void>
+```
+
+<ParamField path="path" type="string" required>
+  An `https://` URL, a `file://` URL, a `glyph-local://` asset URL, or an absolute file system path. Relative paths and empty strings are rejected.
+</ParamField>
+
+---
+
+#### `saveBlob`
+
+Writes raw binary data to a file. Used internally for saving embedded assets.
+
+```typescript
+saveBlob(filePath: string, base64Data: string): Promise<void>
+```
+
+<ParamField path="filePath" type="string" required>
+  Absolute path at which to write the file.
+</ParamField>
+<ParamField path="base64Data" type="string" required>
+  Base64-encoded binary content to write.
+</ParamField>
+
+---
+
+#### `exportMarkdownToPDF`
+
+Converts a markdown string to a PDF and saves it to the downloads folder.
+
+```typescript
+exportMarkdownToPDF(markdown: string, filename: string): Promise<string>
+```
+
+<ParamField path="markdown" type="string" required>
+  Full markdown source to export.
+</ParamField>
+<ParamField path="filename" type="string" required>
+  Output filename including the `.pdf` extension (e.g., `"my-notes.pdf"`).
+</ParamField>
+
+Returns the absolute path where the PDF was saved.
+
+<Note>
+  PDF export strips markdown to plain text using PDFKit. Inline images and complex HTML are not rendered. See [PDF export](/exporting/pdf-export) for details on limitations.
+</Note>

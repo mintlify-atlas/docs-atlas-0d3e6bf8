@@ -1,0 +1,113 @@
+---
+title: "File formats"
+description: "Supported file types, encoding conventions, workspace structure, and settings storage for Glyph."
+---
+
+## Supported markdown extensions
+
+Glyph recognizes three markdown file extensions:
+
+| Extension   | Notes                                               |
+| ----------- | --------------------------------------------------- |
+| `.md`       | Standard markdown. The default extension for new files. |
+| `.mdx`      | Opened and edited as plain markdown. MDX component syntax is not processed. |
+| `.markdown` | Fully supported, less common.                       |
+
+Only files with these extensions appear in the sidebar, are indexed for search, and trigger workspace change events. All other file types are ignored.
+
+<Note>
+  Glyph opens `.mdx` files as plain markdown text. It does not evaluate or render JSX components, imports, or other MDX-specific syntax.
+</Note>
+
+## File encoding
+
+Glyph reads and writes all markdown files as **UTF-8**. No byte-order mark (BOM) is added on write.
+
+### Line endings
+
+Glyph normalizes line endings to **LF (`\n`)** internally. When saving a file, it checks whether the file originally used CRLF (`\r\n`) and preserves that convention if so. New files are written with LF.
+
+<Tip>
+  If your team shares notes across macOS and Windows, keep line endings consistent by committing a `.gitattributes` file with `*.md text eol=lf`.
+</Tip>
+
+## File associations
+
+You can open `.md`, `.mdx`, and `.markdown` files directly from Finder (macOS) or Explorer (Windows) and they will open in Glyph. Glyph registers itself as a handler for these extensions during installation.
+
+- On **macOS**, double-clicking a markdown file in Finder opens it in Glyph and fires the `onExternalFile` event in the renderer.
+- On **Windows**, the target file path is passed via command-line argument at launch time.
+
+If Glyph is already running when you open a file from the OS, the file is delivered to the active window without restarting the app.
+
+## Workspace structure
+
+A workspace is any folder on your file system that contains markdown files. Glyph does not require a configuration file, manifest, or special folder structure.
+
+```
+my-notes/
+├── index.md
+├── projects/
+│   ├── alpha.md
+│   └── beta.mdx
+└── archive/
+    └── 2024/
+        └── q4-retro.md
+```
+
+When you open a folder, Glyph:
+
+1. Recursively scans for `.md`, `.mdx`, and `.markdown` files.
+2. Builds a sidebar tree with directories listed before files, both sorted alphabetically.
+3. Opens the first file found as the active document.
+4. Starts a file watcher (using chokidar) to detect external changes with a 150 ms stabilization debounce.
+
+Directories that contain no markdown files anywhere in their subtree are still shown in the sidebar.
+
+## Images and local assets
+
+You can insert local images into your documents. When you pick a local image using **Insert Image**, Glyph copies the file reference and serves the image via the internal `glyph-local://` protocol — this keeps images accessible in the renderer without exposing arbitrary file paths.
+
+Image files are not copied or moved; they are referenced by their original path on disk. If you move or delete the source image, the link in your document will break.
+
+PDF export does **not** include images. See [PDF export](/exporting/pdf-export) for details.
+
+## Settings file
+
+Glyph stores user preferences in a single JSON file:
+
+| Platform | Path |
+| -------- | ---- |
+| macOS    | `~/Library/Application Support/Glyph/settings.json` |
+| Windows  | `%APPDATA%\Roaming\Glyph\settings.json`             |
+
+The settings file is created automatically with defaults the first time Glyph runs. You do not need to create or edit it manually — use **Settings** in the app instead.
+
+### Format
+
+`settings.json` is a UTF-8 JSON file, formatted with 2-space indentation. An example of the default structure:
+
+```json
+{
+  "defaultWorkspacePath": "/Users/you/Documents/Glyph",
+  "themeId": "aura",
+  "themeMode": "light",
+  "pinnedFiles": [],
+  "shortcuts": [],
+  "sidebar": {
+    "items": [],
+    "expandedFolders": []
+  },
+  "editorPreferences": {
+    "focusMode": false,
+    "showOutline": true
+  },
+  "autoOpenPDF": true
+}
+```
+
+On startup, Glyph validates the settings file and falls back to defaults for any field that is missing, malformed, or references a path that no longer exists. Invalid files are replaced silently rather than causing a crash.
+
+<Warning>
+  Do not edit `settings.json` while Glyph is running. Glyph may overwrite your changes when it next saves settings.
+</Warning>

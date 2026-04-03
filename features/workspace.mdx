@@ -1,0 +1,90 @@
+---
+title: "Workspace"
+description: "How Glyph organizes, watches, and persists your local markdown files."
+keywords: ["workspace", "folder", "sidebar", "files", "autosave", "pinned", "file watcher"]
+---
+
+A workspace is a local folder that Glyph indexes and tracks. Every markdown file inside it appears in the sidebar tree, and changes made outside the app are picked up automatically.
+
+## Default location
+
+When you open Glyph for the first time, it creates and opens a workspace at `Documents/Glyph`. You can switch to any other folder at any time. The path you choose is saved in settings (`defaultWorkspacePath`) and restored the next time you launch the app.
+
+## Opening a workspace
+
+<Steps>
+  <Step title="Choose a method">
+    Use any of the following to open a folder as your workspace:
+
+    - **File > Open Folder** from the menu bar
+    - Keyboard shortcut `Cmd+Shift+O` (macOS) / `Ctrl+Shift+O` (Windows)
+    - Drag and drop a folder onto the Glyph window
+  </Step>
+  <Step title="Select the folder">
+    A native OS dialog opens. Pick the folder you want to use. Glyph creates it if it does not already exist.
+  </Step>
+  <Step title="Start writing">
+    The sidebar populates with your files and the first markdown file opens automatically.
+  </Step>
+</Steps>
+
+<Tip>
+  You can also open an individual markdown file with **File > Open File** (`Cmd+O` / `Ctrl+O`). The file opens in the editor without changing your workspace.
+</Tip>
+
+## Sidebar tree
+
+The sidebar displays a recursive tree of all folders and markdown files inside your workspace. Only files with extensions `.md`, `.mdx`, or `.markdown` appear — other file types are ignored.
+
+Folders sort before files within each directory level. Files and folders at the same level are sorted alphabetically.
+
+### Expanding and collapsing folders
+
+Click any folder name to expand or collapse it. Glyph remembers which folders you have expanded between sessions.
+
+### File actions
+
+Hover over a file to reveal its action controls. Right-click (or click the **⋮** menu button) to access:
+
+- **Rename** — inline rename within the sidebar
+- **Delete** — permanently removes the file from disk (confirmation required)
+- **Reveal in Finder / Show in Explorer** — opens the file location in your OS file manager
+
+To **pin** a file, hover over it and click the pin icon that appears on the row. Pinned files move to the top of the sidebar. Click the pin icon again to unpin.
+
+## Pinned files
+
+Files you pin appear in a dedicated section at the top of the sidebar, above the full tree. Pinning is useful for notes you return to frequently.
+
+To pin a file, hover over it and click the pin icon, or use the **More options** menu in the editor toolbar. Click the pin icon again on a pinned file to unpin it.
+
+Pinned file paths are stored in settings (`pinnedFiles`) and restored on the next launch.
+
+## Creating files and folders
+
+<CardGroup cols={2}>
+  <Card title="New note" icon="file-plus">
+    Press `Cmd+N` / `Ctrl+N`. The new file is created at the workspace root with a timestamped name (`Untitled-<timestamp>.md`). You can rename it immediately from the sidebar.
+  </Card>
+  <Card title="New folder" icon="folder-plus">
+    Right-click any folder in the sidebar and choose **New folder**, or use the context menu. Nested folders are fully supported.
+  </Card>
+</CardGroup>
+
+When you create a file without typing an extension, Glyph appends `.md` automatically.
+
+## Autosave
+
+Glyph saves your work automatically as you type. You do not need to press save after every change. A save-state indicator in the bottom status bar shows whether the current file is up to date.
+
+To save manually at any time, press `Cmd+S` / `Ctrl+S`.
+
+<Note>
+  Line endings are preserved on save. If a file was originally written with Windows-style line endings (`\r\n`), Glyph keeps them. Files written with Unix line endings (`\n`) stay that way.
+</Note>
+
+## File watcher
+
+Glyph monitors your workspace folder using [chokidar](https://github.com/paulmillr/chokidar). When a file is added, renamed, deleted, or changed by an external editor, the sidebar and editor refresh automatically.
+
+A 150 ms stability threshold prevents rapid partial writes (such as those from other editors mid-save) from triggering multiple reloads. Only markdown files (`.md`, `.mdx`, `.markdown`) trigger a refresh — changes to other files in the folder are ignored.

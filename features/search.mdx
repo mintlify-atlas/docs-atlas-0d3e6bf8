@@ -1,0 +1,80 @@
+---
+title: "Search"
+description: "Full-text search and filename filtering across your entire Glyph workspace."
+keywords: ["search", "full-text", "workspace search", "quick open", "find", "grep", "snippet"]
+---
+
+Glyph provides two complementary search modes: **full-text search** scans the content of every markdown file in your workspace, and **quick open** filters by filename.
+
+## Full-text search
+
+Full-text search reads every markdown file in your workspace and returns matching lines, grouped with the filename, line number, and a snippet of context.
+
+### How to open it
+
+- Click the search icon in the editor toolbar, or
+- Open the **Command palette** (`Cmd+P` / `Ctrl+P`) and type your query
+
+### How it works
+
+<Steps>
+  <Step title="Type a query">
+    Start typing in the search input. Results update as you type.
+  </Step>
+  <Step title="Review results">
+    Each result shows:
+
+    - **Filename** — the name of the matching file
+    - **Line number** — the exact line where the match was found
+    - **Snippet** — up to 180 characters of the matching line, trimmed of leading and trailing whitespace
+  </Step>
+  <Step title="Open a result">
+    Click any result to open the file at that location.
+  </Step>
+</Steps>
+
+### Limits and behavior
+
+| Property          | Value                                        |
+| ----------------- | -------------------------------------------- |
+| Max results       | 50 (search stops after the 50th match)       |
+| Case sensitivity  | Case-insensitive (uses `.toLowerCase()` comparison) |
+| Snippet length    | Up to 180 characters per matching line       |
+| File scope        | All `.md`, `.mdx`, and `.markdown` files in the workspace |
+
+<Note>
+  Search runs over the files indexed when the workspace was last opened or refreshed. If you add files externally, the file watcher updates the index automatically within 150 ms of the write completing.
+</Note>
+
+## File search (quick open)
+
+**Quick Open** filters the workspace by filename rather than content. It is faster than full-text search and ideal when you know the name of the file you want.
+
+### How to open it
+
+- Press `Cmd+P` / `Ctrl+P` to open the **Command palette** — file results appear as you type, or
+- Look for the **Quick Open** action in the command palette list
+
+### How it works
+
+Type part of a filename. Results show:
+
+- **Filename** — the matching file's name
+- **Relative path** — the file's path relative to the workspace root
+
+Click a result or press `Enter` to open the file.
+
+<Tip>
+  Quick open matches against filenames only. If you are searching for a word inside your notes, use full-text search instead.
+</Tip>
+
+## Comparison
+
+<CardGroup cols={2}>
+  <Card title="Full-text search" icon="magnifying-glass">
+    Searches the **content** of all markdown files. Returns filename, line number, and a snippet per match. Best for finding notes by topic or keyword.
+  </Card>
+  <Card title="Quick open" icon="file-magnifying-glass">
+    Filters by **filename**. Instant results with relative path context. Best for jumping to a file you know by name.
+  </Card>
+</CardGroup>

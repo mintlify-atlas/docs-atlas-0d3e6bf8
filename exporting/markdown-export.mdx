@@ -1,0 +1,48 @@
+---
+title: "Markdown export"
+description: "Access and share your Glyph notes as plain markdown files — no export step required."
+---
+
+Glyph stores every note as a plain markdown file on disk. There is no separate export step needed: your notes are already in a portable, universally readable format.
+
+## Where your files live
+
+Notes are stored in your workspace folder, which defaults to `Documents/Glyph`. You can see the full path to any note in the sidebar. Every file Glyph works with is a regular file on your filesystem — nothing is locked inside a proprietary database.
+
+### Supported file formats
+
+Glyph works with the following markdown file extensions:
+
+- `.md`
+- `.mdx`
+- `.markdown`
+
+### Line endings
+
+Glyph preserves the original line endings of each file. If a file was created with CRLF line endings (common on Windows), Glyph keeps CRLF when saving. Files that use LF line endings are saved with LF. This ensures compatibility when sharing files across platforms or checking them into version control.
+
+## Revealing a file in your file manager
+
+To open the folder containing a note in Finder or Explorer:
+
+1. Right-click the file in the sidebar.
+2. Select **Reveal in Finder** (macOS) or **Reveal in Explorer** (Windows).
+
+Glyph opens the enclosing folder with the file already selected, so you can copy, move, or share it immediately.
+
+## Copying notes to other tools
+
+Because your notes are plain files, you can use them with any tool that reads markdown:
+
+- **Obsidian** — copy or symlink your workspace folder to an Obsidian vault.
+- **Notion** — use Notion's markdown import to bring notes in.
+- **Static site generators** — drop `.md` files directly into Hugo, Jekyll, or Next.js projects.
+- **Any text editor** — open `.md` files in VS Code, Zed, Vim, or any other editor alongside Glyph.
+
+<Note>
+  Moving or renaming files outside of Glyph (for example, in Finder) is fine. Glyph watches your workspace folder for changes and updates the sidebar automatically.
+</Note>
+
+<Tip>
+  Since your notes are plain text files, they work naturally with Git. Run `git init` inside your workspace folder to get a full version history of every note, branch between drafts, and sync across machines using any Git host.
+</Tip>

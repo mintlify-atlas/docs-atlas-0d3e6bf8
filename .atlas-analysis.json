@@ -1,0 +1,115 @@
+{
+  "projectType": "saas",
+  "projectName": "Glyph",
+  "projectDescription": "Glyph is a local-first markdown editor and reader for macOS and Windows that keeps your notes as plain files while providing a beautiful, focused writing and reading experience.",
+  "theme": "willow",
+  "primaryColor": "#7867c9",
+  "lightColor": "#4c4c54",
+  "darkColor": "#634aa3",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "features/workspace",
+              "features/editor",
+              "features/navigation",
+              "features/search"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/themes",
+              "customization/shortcuts",
+              "customization/settings"
+            ]
+          },
+          {
+            "group": "Exporting",
+            "pages": [
+              "exporting/pdf-export",
+              "exporting/markdown-export"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "Keyboard Shortcuts",
+            "pages": [
+              "reference/shortcuts-reference",
+              "reference/slash-commands"
+            ]
+          },
+          {
+            "group": "Technical",
+            "pages": [
+              "reference/ipc-api",
+              "reference/file-formats",
+              "reference/troubleshooting"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Local-first markdown workspace rooted at Documents/Glyph",
+    "TipTap-based rich markdown editor with markdown-aware shortcuts",
+    "Recursive sidebar with nested folders and recent files",
+    "Command palette and quick-open panel (Cmd/Ctrl+P)",
+    "Full-text workspace search",
+    "Markdown link navigation between notes",
+    "Slash commands for inserting tables, links, and images",
+    "PDF and markdown export",
+    "Theme switching with light/dark/system modes",
+    "Autosave and safe file refresh on external changes",
+    "Focus mode for distraction-free writing",
+    "Table of contents outline panel",
+    "Auto-update via GitHub Releases",
+    "macOS and Windows support"
+  ],
+  "publicApiSurface": [
+    "glyph.openDialog(kind: DialogKind)",
+    "glyph.pickAsset(kind: 'image' | 'any-file')",
+    "glyph.resolveLinkTarget(currentFilePath, href)",
+    "glyph.openFolder(dirPath?)",
+    "glyph.openDefaultWorkspace()",
+    "glyph.openDocument()",
+    "glyph.readFile(filePath)",
+    "glyph.saveFile(filePath, content)",
+    "glyph.createFile(parentDir, fileName)",
+    "glyph.renameFile(oldPath, newName)",
+    "glyph.deleteFile(targetPath)",
+    "glyph.createFolder(parentDir, folderName)",
+    "glyph.searchWorkspace(query)",
+    "glyph.getSidebarNode(kind, targetPath)",
+    "glyph.getSettings()",
+    "glyph.updateSettings(patch)",
+    "glyph.getAppInfo()",
+    "glyph.checkForUpdates()",
+    "glyph.downloadUpdate()",
+    "glyph.installUpdate()",
+    "glyph.onWorkspaceChanged(listener)",
+    "glyph.onCommand(listener)",
+    "glyph.onExternalFile(listener)",
+    "glyph.onUpdateStateChange(listener)",
+    "glyph.revealInFinder(targetPath)",
+    "glyph.openExternal(path)",
+    "glyph.exportMarkdownToPDF(markdown, filename)"
+  ]
+}

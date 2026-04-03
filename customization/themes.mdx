@@ -1,0 +1,75 @@
+---
+title: 'Themes'
+description: 'Switch between light, dark, and system-adaptive themes in Glyph.'
+keywords: ['themes', 'dark mode', 'light mode', 'appearance', 'customization']
+---
+
+Glyph ships with three theme modes that control how the interface renders colors and contrast. Your theme preference persists across sessions.
+
+## Theme modes
+
+<CardGroup cols={3}>
+  <Card title="Light" icon="sun">
+    A bright, high-contrast layout suited for well-lit environments.
+  </Card>
+  <Card title="Dark" icon="moon">
+    A dark background that reduces eye strain in low-light conditions.
+  </Card>
+  <Card title="System" icon="monitor">
+    Automatically matches your operating system's current appearance setting.
+  </Card>
+</CardGroup>
+
+The active theme mode is stored as one of three values in your settings: `"light"`, `"dark"`, or `"system"`.
+
+## Default theme
+
+Glyph opens with the **Aura** theme in light mode out of the box:
+
+| Setting | Default value |
+| --- | --- |
+| `themeId` | `"aura"` |
+| `themeMode` | `"light"` |
+
+## Changing the theme
+
+<Steps>
+  <Step title="Open Settings">
+    Press **Cmd+,** on macOS or **Ctrl+,** on Windows, or open the command palette and search for **Settings**.
+  </Step>
+  <Step title="Find the Appearance setting">
+    Under the **General** tab, find the **Appearance** row.
+  </Step>
+  <Step title="Choose a mode">
+    Pick **Light**, **Dark**, or **System** from the dropdown. The change applies immediately — no restart required.
+  </Step>
+</Steps>
+
+## How theme switching works
+
+Glyph applies themes at runtime using a class on the root `<html>` element:
+
+- **Light mode** — no class is added; the default light styles apply.
+- **Dark mode** — the `.dark` class is added to `<html>`, activating dark-mode CSS variants.
+- **System mode** — Glyph checks `prefers-color-scheme: dark` via `window.matchMedia`. The `.dark` class is added or removed automatically whenever your OS appearance changes. You do not need to restart the app.
+
+## Where the preference is saved
+
+Your theme selection is written to `settings.json` in Glyph's userData directory:
+
+<Tabs>
+  <Tab title="macOS">
+    ```
+    ~/Library/Application Support/Glyph/settings.json
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```
+    %APPDATA%\Glyph\settings.json
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  When you use **System** mode, Glyph responds to OS theme changes in real time. If you switch your system from light to dark while Glyph is running, the editor updates immediately without any action on your part.
+</Note>

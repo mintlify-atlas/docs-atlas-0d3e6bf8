@@ -1,0 +1,67 @@
+---
+title: 'Keyboard shortcuts'
+description: 'Default keyboard shortcuts in Glyph and how to customize them.'
+keywords: ['keyboard shortcuts', 'hotkeys', 'keybindings', 'customization']
+---
+
+Glyph is designed to be keyboard-first. Every core action has a default shortcut, and you can remap any of them from the settings panel.
+
+## Default shortcuts
+
+| Action | macOS | Windows / Linux |
+| --- | --- | --- |
+| Command Palette | `⌘ P` | `Ctrl+P` |
+| New Note | `⌘ N` | `Ctrl+N` |
+| Open File | `⌘ O` | `Ctrl+O` |
+| Open Folder | `⇧ ⌘ O` | `Ctrl+Shift+O` |
+| Save | `⌘ S` | `Ctrl+S` |
+| Settings | `⌘ ,` | `Ctrl+,` |
+| Toggle Sidebar | `⌘ \` | `Ctrl+\` |
+| Navigate Back | `⌘ [` | `Ctrl+[` |
+| Navigate Forward | `⌘ ]` | `Ctrl+]` |
+| Toggle Focus Mode | `⇧ ⌘ F` | `Ctrl+Shift+F` |
+
+## Modifier keys
+
+| Symbol | macOS key | Windows / Linux key |
+| --- | --- | --- |
+| `⌘` | Command (Cmd) | Control (Ctrl) |
+| `⌥` | Option (Alt) | Alt |
+| `⇧` | Shift | Shift |
+
+## Customizing shortcuts
+
+You can remap any shortcut from **Settings → Shortcuts**.
+
+<Steps>
+  <Step title="Open Settings">
+    Press **Cmd+,** (macOS) or **Ctrl+,** (Windows), or search for **Settings** in the command palette.
+  </Step>
+  <Step title="Go to Shortcuts">
+    Select the **Shortcuts** tab in the settings panel.
+  </Step>
+  <Step title="Click a shortcut to edit it">
+    Click the shortcut you want to change. The field becomes active and waits for your input.
+  </Step>
+  <Step title="Press your new key combination">
+    Press the keys you want to assign. Glyph captures the combination immediately — you do not need to type it out.
+  </Step>
+  <Step title="Confirm or cancel">
+    Press **Enter** to save the new binding, or **Escape** to cancel and keep the existing one.
+  </Step>
+</Steps>
+
+## Validation and conflicts
+
+Glyph validates shortcuts before saving them:
+
+- A shortcut must include at least one non-modifier key (e.g., `⌘` alone is not valid).
+-   If the key combination you press is already assigned to another action, Glyph highlights the conflict and rejects the change with an error message. Resolve the conflict by reassigning the other shortcut first.
+
+<Note>
+  Customized shortcuts are saved to `settings.json` in Glyph's userData directory and persist across app restarts. Shortcuts also update the native application menu on macOS automatically.
+</Note>
+
+<Tip>
+  Use the **Command Palette** (`⌘ P` / `Ctrl+P`) as a fallback for any action — it lists all commands and their current shortcuts.
+</Tip>

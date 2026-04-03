@@ -1,0 +1,74 @@
+---
+title: "Slash commands"
+description: "Insert markdown elements quickly by typing / anywhere in the Glyph editor."
+keywords: ["slash commands", "slash menu", "markdown shortcuts", "insert elements"]
+---
+
+Type `/` at the start of any line in the editor to open the slash command menu. As you continue typing after `/`, the list filters to match your input — select an item with the arrow keys and press **Enter**, or click it directly.
+
+<Note>
+  The slash command menu only triggers at the **start of a line**. If `/` is in the middle of existing text, it inserts a literal slash character.
+</Note>
+
+## Usage example
+
+1. Place your cursor at the beginning of a blank line.
+2. Type `/`.
+3. Continue typing to filter — for example, type `table` to jump straight to the **Table** command.
+4. Press **Enter** (or click) to insert.
+
+To dismiss the menu without inserting anything, press **Escape** or delete the `/` character.
+
+## Available commands
+
+Commands are grouped by category.
+
+### Headings
+
+| Command | Description | Shortcut |
+|---------|-------------|----------|
+| **Heading 1** | Large section heading | `⌘⌥1` / `Ctrl+Alt+1` |
+| **Heading 2** | Medium section heading | `⌘⌥2` / `Ctrl+Alt+2` |
+| **Heading 3** | Small section heading | `⌘⌥3` / `Ctrl+Alt+3` |
+
+You can also search for headings using keywords: `h1`, `h2`, `h3`, `heading`, `title`, or `#`.
+
+### Lists
+
+| Command | Description | Keywords |
+|---------|-------------|----------|
+| **Bullet List** | Unordered list | `list`, `bullet`, `ul`, `-` |
+| **Numbered List** | Ordered list | `list`, `number`, `ordered`, `ol`, `1.` |
+| **Task List** | Checklist with markdown checkboxes | `task`, `todo`, `checklist`, `- [ ]` |
+
+### Blocks
+
+| Command | Description | Shortcut |
+|---------|-------------|----------|
+| **Quote** | Blockquote | `⌘⇧B` / `Ctrl+Shift+B` |
+| **Table** | Markdown table | — |
+| **Code Block** | Fenced code block with syntax highlighting | — |
+| **Horizontal Rule** | Thematic break / divider | — |
+
+### Inline
+
+| Command | Description | Shortcut |
+|---------|-------------|----------|
+| **Bold** | Mark selected text as bold | `⌘B` / `Ctrl+B` |
+| **Italic** | Mark selected text as italic | `⌘I` / `Ctrl+I` |
+| **Strikethrough** | Cross out selected text | `⌘⇧S` / `Ctrl+Shift+S` |
+| **Inline Code** | Mark selected text as inline code | `⌘E` / `Ctrl+E` |
+| **Link** | Insert a markdown link | `⌘K` / `Ctrl+K` |
+| **Image** | Insert a markdown image | — |
+
+<Tip>
+  The inline commands (**Bold**, **Italic**, etc.) also work via their keyboard shortcuts directly — you don't need to open the slash menu for them. Use the slash menu when you want to browse available formatting or prefer not to memorize shortcuts.
+</Tip>
+
+## Keyboard navigation
+
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Move selection up or down |
+| `Enter` | Insert the selected element |
+| `Escape` | Dismiss the menu |

@@ -1,0 +1,116 @@
+---
+title: 'Settings'
+description: 'All configurable options in Glyph, where they are stored, and how to reset them.'
+keywords: ['settings', 'configuration', 'preferences', 'customization']
+---
+
+Glyph stores your preferences in a single JSON file on disk. Every setting takes effect immediately and persists across app restarts.
+
+## Opening settings
+
+Press **Cmd+,** on macOS or **Ctrl+,** on Windows. You can also open the command palette (**Cmd/Ctrl+P**) and search for **Settings**.
+
+The settings panel has two tabs: **General** (workspace path, appearance, PDF export) and **Shortcuts** (keyboard binding editor).
+
+## Where settings are stored
+
+<Tabs>
+  <Tab title="macOS">
+    ```
+    ~/Library/Application Support/Glyph/settings.json
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```
+    %APPDATA%\Glyph\settings.json
+    ```
+  </Tab>
+</Tabs>
+
+Glyph writes to this file whenever you change a preference. The file uses standard JSON formatting, so you can inspect it in any text editor.
+
+## Settings reference
+
+<AccordionGroup>
+  <Accordion title="General">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultWorkspacePath` | `string` | `Documents/Glyph` | The folder Glyph opens on launch. Change it under **Settings → General → Workspace Folder**. |
+| `autoOpenPDF` | `boolean` | `true` | When `true`, Glyph automatically opens the exported PDF file after export completes. |
+
+  </Accordion>
+
+  <Accordion title="Appearance (General tab)">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `themeId` | `string` | `"aura"` | The active color theme. |
+| `themeMode` | `"light" \| "dark" \| "system"` | `"light"` | Controls whether the interface uses the light palette, dark palette, or follows the OS appearance. Configured via the **Appearance** dropdown in **Settings → General**. |
+
+See [Themes](/customization/themes) for more detail on how theme modes work.
+
+  </Accordion>
+
+  <Accordion title="Editor preferences (settings.json only)">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `editorPreferences.focusMode` | `boolean` | `false` | When `true`, the sidebar and chrome are hidden to maximize writing space. Toggle with **Cmd/Ctrl+Shift+F**. |
+| `editorPreferences.showOutline` | `boolean` | `true` | When `true`, the document outline panel is visible alongside the editor. |
+
+These preferences are persisted automatically when you use the editor controls (focus mode button, outline toggle in the toolbar). They are not exposed as explicit inputs in the settings panel.
+
+  </Accordion>
+
+  <Accordion title="Keyboard shortcuts (Shortcuts tab)">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `shortcuts` | `{ id: string; keys: string }[]` | All default bindings | An array of shortcut overrides. Each entry maps a shortcut ID to a key combination. Entries not present in this array fall back to the built-in defaults. |
+
+Managed via **Settings → Shortcuts**. Use the **Reset to defaults** button to restore all bindings. See [Keyboard shortcuts](/customization/shortcuts) for the full list of IDs and default bindings.
+
+  </Accordion>
+
+  <Accordion title="Sidebar">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sidebar.items` | `{ kind: "file" \| "directory"; path: string }[]` | `[]` | Files and folders pinned to the sidebar. Each entry specifies whether it is a file or a directory and its absolute path. |
+| `sidebar.expandedFolders` | `string[]` | `[]` | Absolute paths of folders that are currently expanded in the sidebar tree. |
+
+  </Accordion>
+
+  <Accordion title="Pinned files">
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `pinnedFiles` | `string[]` | `[]` | Absolute paths of files pinned for quick access. Paths that no longer exist on disk are silently removed when settings load. |
+
+  </Accordion>
+</AccordionGroup>
+
+## Resetting to defaults
+
+If you want to start fresh, delete `settings.json`. Glyph recreates it with all default values the next time it launches.
+
+<Steps>
+  <Step title="Quit Glyph">
+    Close the application completely before editing the file.
+  </Step>
+  <Step title="Delete settings.json">
+    Navigate to the userData directory for your platform and delete the file.
+
+    **macOS:** `~/Library/Application Support/Glyph/settings.json`
+
+    **Windows:** `%APPDATA%\Glyph\settings.json`
+  </Step>
+  <Step title="Relaunch Glyph">
+    Glyph generates a fresh `settings.json` with all defaults restored.
+  </Step>
+</Steps>
+
+<Note>
+  Glyph validates settings on load. Invalid values (such as unrecognized `themeMode` strings) fall back to their defaults silently. Paths in `pinnedFiles` and `sidebar.items` that no longer exist on disk are skipped without an error.
+</Note>
